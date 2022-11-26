@@ -7,6 +7,8 @@ class Game {
         this.bg = new Background(this.ctx)
         this.player = new Player(this.ctx, 100, this.canvas.height / 2, 100)
         this.obstacles = []
+        
+        this.score = 0
     }
 
     start() {
@@ -26,6 +28,9 @@ class Game {
             }
             this.drawObstacles()
             this.moveObstacles()
+            this.checkCollision()
+            this.getScore()
+            this.drawScore()
             count++
         }, 1000 / 60)
     }
@@ -48,5 +53,32 @@ class Game {
 
     moveObstacles() {
         this.obstacles.forEach(obstacle => obstacle.move())
+    }
+
+    checkCollision() {
+        this.obstacles.forEach(obstacle => {
+            if (obstacle.topIsColliding(this.player) /*|| obstacle.bottomIsColliding(this.player)*/) {
+                this.gameOver()
+            }
+        })
+    }
+
+    gameOver() {
+        clearInterval(this.intervalId)
+    }
+
+    getScore() {
+        this.obstacles.forEach(obstacle => {
+            if(obstacle.x + obstacle.width < 0) {
+                this.score++
+                this.obstacles.splice(this.obstacles.indexOf(obstacle), 1)
+            }
+        })
+    }
+
+    drawScore() {
+        this.ctx.fillStyle = "white"
+        this.ctx.font = "24px Arial"
+        this.ctx.fillText(`score: ${this.score}`, 30, 40)
     }
 }
