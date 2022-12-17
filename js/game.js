@@ -31,6 +31,7 @@ class Game {
             this.checkCollision()
             this.getScore()
             this.drawScore()
+            this.checkForGameOver()
             count++
         }, 1000 / 60)
     }
@@ -80,5 +81,11 @@ class Game {
         this.ctx.fillStyle = "white"
         this.ctx.font = "24px Arial"
         this.ctx.fillText(`score: ${this.score}`, 30, 40)
+    }
+
+    checkForGameOver() {
+        if(this.player.y + this.player.height > this.canvas.height) {
+            this.gameOver()
+        }
     }
 }
